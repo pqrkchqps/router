@@ -11,7 +11,6 @@ angular.module('ngNewRouter', [])
   .factory('$$pipeline', privatePipelineFactory)
   .factory('$setupRoutersStep', setupRoutersStepFactory)
   .factory('$initLocalsStep', initLocalsStepFactory)
-  .factory('$initControllersStep', initControllersStepFactory)
   .factory('$runCanDeactivateHookStep', runCanDeactivateHookStepFactory)
   .factory('$runCanActivateHookStep', runCanActivateHookStepFactory)
   .factory('$loadTemplatesStep', loadTemplatesStepFactory)
@@ -114,7 +113,8 @@ function routerFactory($$rootRouter, $rootScope, $location, $$grammar, $controll
  *
  * The value for the `ngViewport` attribute is optional.
  */
-function ngViewportDirective($animate, $injector, $q, $router) {
+
+function ngViewportDirective($animate, $injector, $q, $router, $componentLoader, $controller) {
   var rootRouter = $router;
 
   return {
@@ -177,7 +177,20 @@ function ngViewportDirective($animate, $injector, $q, $router) {
           return;
         }
 
-        instruction.locals.$scope = newScope = scope.$new();
+        var controllerConstructor = instruction.controllerConstructor;
+
+        if (!instruction.locals.$scope) {
+          instruction.locals.$scope = scope.$new();
+        }
+        newScope = instruction.locals.$scope;
+
+        if (controllerConstructor === NOOP_CONTROLLER) {
+          console.warn && console.warn('Could not find controller for', $componentLoader.controllerName(instruction.component));
+        }
+        var ctrl = $controller(controllerConstructor, instruction.locals);
+        instruction.controllerAs = $componentLoader.controllerAs(instruction.component);
+        instruction.controller = ctrl;
+
         myCtrl.$$router = instruction.router;
         myCtrl.$$template = instruction.template;
         var componentName = instruction.component;
@@ -363,6 +376,7 @@ function initLocalsStepFactory() {
   }
 }
 
+<<<<<<< HEAD
 /*
  * $initControllersStep
  */
@@ -382,6 +396,8 @@ function initControllersStepFactory($controller, $componentLoader) {
     });
   }
 }
+=======
+>>>>>>> 5a2441f... fix: allow injecting $scope into controller constructor
 
 function runCanDeactivateHookStepFactory() {
   return function runCanDeactivateHook(instruction) {
