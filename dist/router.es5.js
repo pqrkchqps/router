@@ -510,8 +510,8 @@ function $componentMapperFactory() {
   };
 
   var componentToTemplate = function componentToTemplateDefault(name) {
-    var dashName = dashCase(name);
-    return './components/' + dashName + '/' + dashName + '.html';
+    var snakeName = snakeCase(name);
+    return 'generated/components/' + snakeName + '/' + snakeName + '.html';
   };
 
   var ctrlToComponent = function ctrlToComponentDefault(name) {
@@ -584,9 +584,9 @@ function privatePipelineFactory($pipeline) {
 privatePipelineFactory.$inject = ["$pipeline"];
 
 
-function dashCase(str) {
+function snakeCase(str) {
   return str.replace(/([A-Z])/g, function ($1) {
-    return '-' + $1.toLowerCase();
+    return '_' + $1.toLowerCase();
   });
 }
 
