@@ -7,7 +7,7 @@ define([], function() {
       return instruction.router.canDeactivatePorts(instruction);
     }), (function(instruction) {
       return instruction.router.traversePorts((function(port, name) {
-        return boolToPromise(port.canActivate(instruction.viewports[name]));
+        return boolToPromise(port.canActivate(instruction.outlets[name]));
       }));
     }), (function(instruction) {
       return instruction.router.activatePorts(instruction);

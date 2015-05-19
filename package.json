@@ -1,15 +1,15 @@
 {
-  "name": "angular-new-router",
-  "version": "0.5.3",
+  "name": "loomio-angular-router",
+  "version": "0.5.4",
   "description": "A new router for both Angular 1 and Angular 2",
-  "homepage": "https://github.com/angular/router",
+  "homepage": "https://github.com/loomio/router",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/angular/router.git"
+    "url": "git://github.com/loomio/router.git"
   },
   "bugs": {
-    "url": "https://github.com/angular/router/issues"
+    "url": "https://github.com/loomio/router/issues"
   },
   "dependencies": {
     "requirejs": "^2.1.15",

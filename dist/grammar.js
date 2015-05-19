@@ -39,23 +39,23 @@ define(["assert", 'route-recognizer'], function($__0,$__2) {
       var lastHandler = lastContextChunk.handler;
       var lastParams = lastContextChunk.params;
       var instruction = {
-        viewports: {},
+        outlets: {},
         params: lastParams
       };
       if (lastParams && lastParams.childRoute) {
         var childUrl = '/' + lastParams.childRoute;
         instruction.canonicalUrl = lastHandler.rewroteUrl.substr(0, lastHandler.rewroteUrl.length - (lastParams.childRoute.length + 1));
-        forEach(lastHandler.components, (function(componentName, viewportName) {
-          instruction.viewports[viewportName] = $__4.recognize(childUrl, componentName);
+        forEach(lastHandler.components, (function(componentName, outletName) {
+          instruction.outlets[outletName] = $__4.recognize(childUrl, componentName);
         }));
-        instruction.canonicalUrl += instruction.viewports[Object.keys(instruction.viewports)[0]].canonicalUrl;
+        instruction.canonicalUrl += instruction.outlets[Object.keys(instruction.outlets)[0]].canonicalUrl;
       } else {
         instruction.canonicalUrl = lastHandler.rewroteUrl;
-        forEach(lastHandler.components, (function(componentName, viewportName) {
-          instruction.viewports[viewportName] = {viewports: {}};
+        forEach(lastHandler.components, (function(componentName, outletName) {
+          instruction.outlets[outletName] = {outlets: {}};
         }));
       }
-      forEach(instruction.viewports, (function(instruction, componentName) {
+      forEach(instruction.outlets, (function(instruction, componentName) {
         instruction.component = lastHandler.components[componentName];
         instruction.params = lastParams;
       }));
@@ -138,8 +138,8 @@ define(["assert", 'route-recognizer'], function($__0,$__2) {
       if (mapping.as) {
         aliases = [mapping.as];
       } else {
-        aliases = mapObj(mapping.components, (function(componentName, viewportName) {
-          return viewportName + ':' + componentName;
+        aliases = mapObj(mapping.components, (function(componentName, outletName) {
+          return outletName + ':' + componentName;
         }));
         if (mapping.components.default) {
           aliases.push(mapping.components.default);

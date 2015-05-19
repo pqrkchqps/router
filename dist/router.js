@@ -27,7 +27,7 @@ define(["assert", './grammar', './pipeline'], function($__0,$__2,$__4) {
       }
       return this.children[name];
     },
-    registerViewport: function(view) {
+    registerOutlet: function(view) {
       var name = arguments[1] !== (void 0) ? arguments[1] : 'default';
       this.ports[name] = view;
       return this.renavigate();
@@ -69,10 +69,10 @@ define(["assert", './grammar', './pipeline'], function($__0,$__2,$__4) {
     },
     traverseInstructionSync: function(instruction, fn) {
       var $__6 = this;
-      forEach(instruction.viewports, (function(childInstruction, viewportName) {
+      forEach(instruction.outlets, (function(childInstruction, outletName) {
         return fn(instruction, childInstruction);
       }));
-      forEach(instruction.viewports, (function(childInstruction) {
+      forEach(instruction.outlets, (function(childInstruction) {
         return $__6.traverseInstructionSync(childInstruction, fn);
       }));
     },
@@ -80,37 +80,37 @@ define(["assert", './grammar', './pipeline'], function($__0,$__2,$__4) {
       if (!instruction) {
         return Promise.resolve();
       }
-      return mapObjAsync(instruction.viewports, (function(childInstruction, viewportName) {
-        return boolToPromise(fn(childInstruction, viewportName));
+      return mapObjAsync(instruction.outlets, (function(childInstruction, outletName) {
+        return boolToPromise(fn(childInstruction, outletName));
       })).then((function() {
-        return mapObjAsync(instruction.viewports, (function(childInstruction, viewportName) {
+        return mapObjAsync(instruction.outlets, (function(childInstruction, outletName) {
           return childInstruction.router.traverseInstruction(childInstruction, fn);
         }));
       }));
     },
     activatePorts: function(instruction) {
-      return this.queryViewports((function(port, name) {
-        return port.activate(instruction.viewports[name]);
+      return this.queryOutlets((function(port, name) {
+        return port.activate(instruction.outlets[name]);
       })).then((function() {
-        return mapObjAsync(instruction.viewports, (function(instruction) {
+        return mapObjAsync(instruction.outlets, (function(instruction) {
           return instruction.router.activatePorts(instruction);
         }));
       }));
     },
     canDeactivatePorts: function(instruction) {
       return this.traversePorts((function(port, name) {
-        return boolToPromise(port.canDeactivate(instruction.viewports[name]));
+        return boolToPromise(port.canDeactivate(instruction.outlets[name]));
       }));
     },
     traversePorts: function(fn) {
       var $__6 = this;
-      return this.queryViewports(fn).then((function() {
+      return this.queryOutlets(fn).then((function() {
         return mapObjAsync($__6.children, (function(child) {
           return child.traversePorts(fn);
         }));
       }));
     },
-    queryViewports: function(fn) {
+    queryOutlets: function(fn) {
       return mapObjAsync(this.ports, fn);
     },
     recognize: function(url) {
