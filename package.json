@@ -1,6 +1,6 @@
 {
   "name": "loomio-angular-router",
-  "version": "0.5.6",
+  "version": "0.5.8",
   "description": "A new router for both Angular 1 and Angular 2",
   "homepage": "https://github.com/loomio/router",
   "main": "index.js",
